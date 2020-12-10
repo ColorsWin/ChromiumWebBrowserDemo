@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <!--<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>-->
+    <script src="jquery.min.2.1.4.js"></script>
+    <script>
+        //初始化变量 可以在浏览器里面进行初始化
+        //CefSharp.BindObjectAsync('webBrowserObj');
+        //alert(webBrowserObj.ShowMessage());
+    </script>
+
+    <title>浏览器和C#互相调用</title>
+
+    <script>      
+
+        //1、网页调用C#
+        function callCsharp1() {
+            webBrowserObj.ShowMessage();
+        };
+
+        function callCsharp2() {
+         
+            var data2 = $("#txtArg").attr("value");    //大坑 值不会时刻变化
+            // alert(data2);
+            var data = $("#txtArg").val();
+            webBrowserObj.ShowMessageArg(data);
+        };
+
+        function callCsharp3() {
+            var data = $("#txtArg").val();
+            var result = webBrowserObj.GetData(data);
+            alert(result);
+        };
+
+        function callback(data) {
+
+            $("#msg").html('');
+            $("#msg").append($("<li>获取值:<span style='color:blue'>" + data + "</span></li>"))
+            //alert(data);
+        };
+        function callCsharp4() {
+
+            //该种方式咱不知道如何传参数给C#
+            webBrowserObj.GetDataByCallback(callback);
+        };
+
+        //2、C#调用网页
+        var jsVar = '123';
+        function Hello() {
+            alert('调用Js' + jsVar);
+        };
+
+        function ShowMessage() {
+            alert('我是网页');
+        };
+        function ShowMessageArg(arg) {
+            alert('【我是网页消息框】' + arg);
+        };
+        function GetData(arg) {
+            return '【我是网页返回给你】:' + arg;
+        };
+    </script>
+</head>
+
+<body>
+    <div style="margin-top:15px"> 参数值:<input id="txtArg" value="Hello" /></div>
+    <div style="margin-top:15px">
+        <button onclick="callCsharp1()">调用C#</button>
+        <button onclick="callCsharp2()">调用C#传参数</button>
+        <button onclick="callCsharp3()">调用C#获取值</button>
+        <button style="color:#FF0000" onclick="callCsharp4()">调用C#获取值</button>
+    </div>
+    <ul id="msg"></ul>
+</body>
+</html>
