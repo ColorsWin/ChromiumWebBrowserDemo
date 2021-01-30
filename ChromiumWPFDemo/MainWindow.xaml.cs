@@ -1,7 +1,7 @@
 ﻿using CefSharp;
+using System;
 using System.IO;
 using System.Windows;
-using System;
 
 namespace ChromiumWPFDemo
 {
@@ -22,7 +22,7 @@ namespace ChromiumWPFDemo
                 new ScriptCallbackObject(), false, bindingOptions);
             chromiumWebBrowser.FrameLoadEnd += ChromiumWebBrowser_FrameLoadEnd;
 
-            LoadTest();
+            LoadTest(); 
         }
 
         private void ChromiumWebBrowser_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)

@@ -25,7 +25,8 @@
                     Margin="20 0 0 0"
                     Height="30"
                     Click="Button_Click"
-                    Width="60"></Button>
+                    Width="60">               
+            </Button>
             <Button Content="测试本地网页"
                     Margin="20 0 0 0"
                     Height="30"
@@ -33,7 +34,6 @@
                     Click="btn_Click"
                     Width="80"></Button>
         </StackPanel>
-
         <StackPanel Orientation="Horizontal"
                     Grid.Row="1"
                     Background="#FFA4E0AC">
@@ -44,27 +44,25 @@
                      Width="200"
                      x:Name="txtArg"
                      Text="Hello--JS"></TextBox>
-
             <Button Content="调用JS"
                     Margin="20 0 0 0"
                     Height="30"
                     x:Name="callJS"
                     Click="callJS_Click"
                     Width="60"></Button>
-
             <Button Content="调用JS传参数"
                     Margin="20 0 0 0"
                     Height="30"
                     Click="callJSArg_Click"
                     Width="80"></Button>
-
             <Button Content="调用JS获取值"
                     Margin="20 0 0 0"
                     Height="30"
                     Click="callJSGetData_Click"
                     Width="80"></Button>
         </StackPanel>
-        <cefSharpWPF:ChromiumWebBrowser x:Name="chromiumWebBrowser"
+        <cefSharpWPF:ChromiumWebBrowser local:CefTouchHelper.Scrolling="True"
+                                        x:Name="chromiumWebBrowser"
                                         Grid.Row="2"></cefSharpWPF:ChromiumWebBrowser>
     </Grid>
 </Window>
