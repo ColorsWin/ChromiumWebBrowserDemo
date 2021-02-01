@@ -1,0 +1,5 @@
+﻿
+触摸问题:
+https://github.com/cefsharp/CefSharp/pull/1418
+https://github.com/amaitland/CefSharp/tree/enhancement/wpftouchscroll
+https://github.com/amaitland/CefSharp/tree/wpftouchsupport

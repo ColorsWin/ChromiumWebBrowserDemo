@@ -25,13 +25,12 @@
                     Margin="20 0 0 0"
                     Height="30"
                     Click="Button_Click"
-                    Width="60">               
-            </Button>
+                    Width="60"></Button>
             <Button Content="测试本地网页"
                     Margin="20 0 0 0"
                     Height="30"
                     x:Name="btn"
-                    Click="btn_Click"
+                    Click="Btn_Click"
                     Width="80"></Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal"
@@ -61,7 +60,7 @@
                     Click="callJSGetData_Click"
                     Width="80"></Button>
         </StackPanel>
-        <cefSharpWPF:ChromiumWebBrowser local:CefTouchHelper.Scrolling="True"
+        <cefSharpWPF:ChromiumWebBrowser IsManipulationEnabled="True"
                                         x:Name="chromiumWebBrowser"
                                         Grid.Row="2"></cefSharpWPF:ChromiumWebBrowser>
     </Grid>

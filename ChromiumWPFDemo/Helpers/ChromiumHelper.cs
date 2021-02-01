@@ -36,6 +36,8 @@ namespace ChromiumBrowser.Helpers
         {
             //Perform dependency check to make sure all relevant resources are in our output directory.
             var settings = new CefSettings();
+           // settings.CefCommandLineArgs.Add("touch-events", "1");
+            settings.CefCommandLineArgs.Add("touch-events", "enabled");
             // settings.CefCommandLineArgs.Add("--disable-web-security", "1");//关闭同源策略,允许跨域
             CefSharp.Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
         }

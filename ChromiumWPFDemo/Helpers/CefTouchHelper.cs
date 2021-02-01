@@ -18,7 +18,8 @@ using System.Windows.Media;
 namespace ChromiumWPFDemo
 {
     /// <summary>
-    /// 触摸 帮助  在控件里面使用 local:CefTouch.Scrolling="True"
+    /// 触摸 帮助  在控件里面使用 local:CefTouch.Scrolling="True" 
+    /// 47版本自带支持触摸，中间版本不支持比如71版本， 新版本有支持比如81版本
     /// </summary>
     public class CefTouchHelper : DependencyObject
     {
@@ -43,19 +44,19 @@ namespace ChromiumWPFDemo
         }
 
         public static readonly DependencyProperty ScrollingProperty =
-            DependencyProperty.RegisterAttached("Scrolling", typeof(bool), typeof(CefTouchHelper), new UIPropertyMetadata(false, _OnScrollingChanged));
+            DependencyProperty.RegisterAttached("Scrolling", typeof(bool), typeof(CefTouchHelper), new UIPropertyMetadata(false, OnScrollingChanged));
 
-        static void _OnScrollingChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        static void OnScrollingChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             if (!(sender is FrameworkElement _target)) { return; }
 
             if ((bool)e.NewValue)
             {
-                _target.Loaded += _OnLoaded;
+                _target.Loaded += OnLoaded;
             }
             else
             {
-                _OnUnloaded(_target, new RoutedEventArgs());
+                OnUnloaded(_target, new RoutedEventArgs());
             }
         }
 
@@ -66,21 +67,24 @@ namespace ChromiumWPFDemo
         /// <summary> G/S:捕获的触屏数据 </summary>
         private static readonly Dictionary<object, CefTouchCapture> _Captures = new Dictionary<object, CefTouchCapture>();
 
-        private static void _OnLoaded(object sender, RoutedEventArgs e)
+        private static void OnLoaded(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Scrolling Touched Loaded");
 
             if (!(sender is FrameworkElement _target)) { return; }
 
-            _target.Unloaded += _OnUnloaded;
+            _target.Unloaded += OnUnloaded;
+            //_target.PreviewTouchDown += _OnDown;
 
-            _target.TouchDown += _OnDown;
-            _target.TouchMove += _OnMove;
-            _target.TouchUp += _OnUp;
-            _target.TouchLeave += _OnUp;
+            _target.TouchDown += OnDown;
+            _target.TouchMove += OnMove;
+            _target.TouchUp += OnUp;
+            _target.TouchLeave += OnUp;
         }
 
-        private static void _OnUnloaded(object sender, RoutedEventArgs e)
+
+
+        private static void OnUnloaded(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Scrolling Touched Unloaded");
 
@@ -88,36 +92,39 @@ namespace ChromiumWPFDemo
 
             _Captures.Remove(sender);
 
-            _target.Loaded -= _OnLoaded;
-            _target.Unloaded -= _OnUnloaded;
+            _target.Loaded -= OnLoaded;
+            _target.Unloaded -= OnUnloaded;
 
-            _target.TouchDown -= _OnDown;
-            _target.TouchMove -= _OnMove;
-            _target.TouchUp -= _OnUp;
-            _target.TouchLeave -= _OnUp;
+            _target.TouchDown -= OnDown;
+            _target.TouchMove -= OnMove;
+            _target.TouchUp -= OnUp;
+            _target.TouchLeave -= OnUp;
         }
 
-        private static void _OnDown(object sender, TouchEventArgs e)
+        private static void OnDown(object sender, TouchEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Scrolling Touch Down");
-            IWebBrowser _webBrowser = null;
+
+            e.Handled = true;
+
+            IWebBrowser webBrowser = null;
             CefTouchCapture _capture = null;
             if (!_Captures.ContainsKey(sender))
             {
-                _webBrowser = (sender as IWebBrowser);
-                if (_webBrowser == null)
+                webBrowser = (sender as IWebBrowser);
+                if (webBrowser == null)
                 {
-                    _webBrowser = VisualTreeHelperEx.FindChildOfType<ChromiumWebBrowser>(sender as DependencyObject);
+                    webBrowser = VisualTreeHelperEx.FindChildOfType<ChromiumWebBrowser>(sender as DependencyObject);
                 }
             }
             else
             {
                 _capture = _Captures[sender];
                 if (_capture == null) { return; }
-                _webBrowser = _capture.Browser;
+                webBrowser = _capture.Browser;
             }
 
-            if (_webBrowser == null) { return; }
+            if (webBrowser == null) { return; }
             if (_capture == null)
             {
                 _capture = new CefTouchCapture();
@@ -125,12 +132,12 @@ namespace ChromiumWPFDemo
             _capture.IsMouseDown = true;
             _capture.Point = null;
             _capture.MoveTime = DateTime.Now;
-            _capture.Browser = _webBrowser;
-            _capture.Host = _webBrowser.GetBrowser().GetHost();
+            _capture.Browser = webBrowser;
+            _capture.Host = webBrowser.GetBrowser().GetHost();
             _Captures[sender] = _capture;
         }
 
-        private static void _OnUp(object sender, TouchEventArgs e)
+        private static void OnUp(object sender, TouchEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Scrolling Touch Up");
             if (!_Captures.ContainsKey(sender)) { return; }
@@ -142,7 +149,7 @@ namespace ChromiumWPFDemo
             _capture.Point = null;
         }
 
-        private static void _OnMove(object sender, TouchEventArgs e)
+        private static void OnMove(object sender, TouchEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Scrolling Touch Move");
             if (!_Captures.ContainsKey(sender)) { return; }
@@ -150,7 +157,7 @@ namespace ChromiumWPFDemo
             var _capture = _Captures[sender];
             if (_capture == null) { return; }
 
-            if ((DateTime.Now - _capture.MoveTime).TotalMilliseconds < 150) { return; }
+            //if ((DateTime.Now - _capture.MoveTime).TotalMilliseconds < 150) { return; }
 
             if (!(sender is IInputElement _ielement)) { return; }
 

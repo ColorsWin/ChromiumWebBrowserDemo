@@ -15,14 +15,19 @@ namespace ChromiumWPFDemo
             InitializeComponent();
 
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
-            CefSharpSettings.WcfEnabled = true;
-            BindingOptions bindingOptions = new BindingOptions();
-            bindingOptions.CamelCaseJavascriptNames = false;
+            //CefSharpSettings.WcfEnabled = true;
+            var bindingOptions = new BindingOptions()
+            {
+                CamelCaseJavascriptNames = false
+            };
+            //  bindingOptions.CamelCaseJavascriptNames = false;
             chromiumWebBrowser.JavascriptObjectRepository.Register("webBrowserObj",
                 new ScriptCallbackObject(), false, bindingOptions);
-            chromiumWebBrowser.FrameLoadEnd += ChromiumWebBrowser_FrameLoadEnd;
 
-            LoadTest(); 
+            chromiumWebBrowser.FrameLoadEnd += ChromiumWebBrowser_FrameLoadEnd;
+            chromiumWebBrowser.MenuHandler = new MenuHandler();
+
+            LoadTest();
         }
 
         private void ChromiumWebBrowser_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
@@ -35,7 +40,7 @@ namespace ChromiumWPFDemo
             chromiumWebBrowser.Address = txtUrl.Text;
         }
 
-        private void btn_Click(object sender, RoutedEventArgs e)
+        private void Btn_Click(object sender, RoutedEventArgs e)
         {
             LoadTest();
         }
@@ -57,10 +62,10 @@ namespace ChromiumWPFDemo
             return;
 
             #region 其他功能
-            chromiumWebBrowser.ExecuteScriptAsync("Hello()");
-            // 为 js 的 变量jsVar赋值 'abc'
-            chromiumWebBrowser.ExecuteScriptAsync("jsVar='---改变值abc'");
-            chromiumWebBrowser.ExecuteScriptAsync("Hello()");
+            //chromiumWebBrowser.ExecuteScriptAsync("Hello()");
+            //// 为 js 的 变量jsVar赋值 'abc'
+            //chromiumWebBrowser.ExecuteScriptAsync("jsVar='---改变值abc'");
+            //chromiumWebBrowser.ExecuteScriptAsync("Hello()");
             #endregion
         }
 
