@@ -42,6 +42,17 @@ namespace ChromiumWPFDemo
 
         private void Btn_Click(object sender, RoutedEventArgs e)
         {
+            var window = new Window1();
+            window.Loaded += delegate
+            {
+                window.Owner = this;
+            };
+            window.Show();
+
+            //this.Owner = window;
+
+            //window.Owner = this;
+
             LoadTest();
         }
 
@@ -53,7 +64,10 @@ namespace ChromiumWPFDemo
             chromiumWebBrowser.Address = "file:///" + url;
 
             //txtUrl.Text = chromiumWebBrowser.Address;
+
         }
+
+
 
         private void callJS_Click(object sender, RoutedEventArgs e)
         {
